@@ -1,0 +1,8 @@
+require('config.lazy')
+require('mapping')
+require('autocommands')
+require('utils')
+require('options')
+require('plugins.telescope')
+require('plugins.treesitter')
+require('plugins.gitsigns')
