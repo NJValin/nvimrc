@@ -36,6 +36,7 @@ require("lazy").setup({
     -- LSP and completion
     { "neovim/nvim-lspconfig" },
     { "hrsh7th/nvim-cmp" },
+    { "folke/which-key.nvim" },
 
     -- Additional plugins
     { "vim-airline/vim-airline" },                      -- Status line
