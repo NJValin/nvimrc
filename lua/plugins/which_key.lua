@@ -2,7 +2,8 @@ return {
 	"folke/which-key.nvim",
 	config = function()
 		require('which-key').setup({
-			keys = vim.g.have_nerd_font and {} or {
+			preset = "classic",
+			keys =  {
 				Up = '<Up> ',
 				Down = '<Down> ',
 				Left = '<Left> ',
@@ -33,13 +34,14 @@ return {
 				F12 = '<F12>',
 			},
 			spec = {
-				--{ '<leader>c', group = '[C]ode', mode = { 'n', 'x' } },
+				{ '<leader>g', group = '[G]oto', mode = { 'n', 'x' } },
 				--{ '<leader>d', group = '[D]ocument' },
-				--{ '<leader>r', group = '[R]ename' },
+				{ '<leader>r', group = '[R]ename' },
 				{ '<leader>f', group = '[F]ind' },
-				--{ '<leader>w', group = '[W]orkspace' },
+				{ '<leader>w', group = '[W]orkspace' },
 				--{ '<leader>t', group = '[T]oggle' },
 				{ '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+				{ '<leader>n', group = '[N]eogen', mode = { 'n', 'x' } },
 			},
 		})
 	end

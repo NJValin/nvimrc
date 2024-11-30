@@ -1,4 +1,4 @@
-require('lazy')
+require('init_lazy')
 require('mapping')
 require('autocommands')
 require('utils')
