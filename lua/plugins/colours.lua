@@ -5,6 +5,17 @@ end
 
 return {
 	{
+		"zaldih/themery.nvim",
+		lazy = false,
+		config = function()
+			require("themery").setup({
+				themes = {"melange", "tokyonight", "rose-pine", "kanagawa-lotus","kanagawa-dragon", "kanagawa-wave"},
+				livePreview = true, -- Apply theme while picking. Default to true
+
+			})
+		end
+	},
+	{
 		"folke/tokyonight.nvim",
 
 		config = function()
@@ -36,6 +47,13 @@ return {
 		config = function()
 			vim.cmd("colorscheme melange")
 			Colourize()
+		end
+	},
+	{
+		"rebelot/kanagawa.nvim",
+		name = "kanagawa",
+		config = function ()
+			vim.cmd("colorscheme kanagawa")
 		end
 	},
 }
