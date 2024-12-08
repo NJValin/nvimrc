@@ -9,9 +9,28 @@ return {
 		lazy = false,
 		config = function()
 			require("themery").setup({
-				themes = {"melange", "tokyonight", "rose-pine", "kanagawa-lotus","kanagawa-dragon", "kanagawa-wave"},
+				themes = {"melange",
+					"tokyonight",
+					"rose-pine",
+					"kanagawa-lotus",
+					"kanagawa-dragon",
+					"kanagawa-wave",
+					{
+						name = "Oxocarbon Light",
+						colorscheme = "oxocarbon",
+						before = [[
+							vim.opt.background = "light"
+						]],
+					},
+					{
+						name = "Oxocarbon Dark",
+						colorscheme = "oxocarbon",
+						before = [[
+							vim.opt.background = "dark"
+						]],
+					},},
 				livePreview = true, -- Apply theme while picking. Default to true
-
+				
 			})
 		end
 	},
@@ -55,5 +74,15 @@ return {
 		config = function ()
 			vim.cmd("colorscheme kanagawa")
 		end
+	},
+	{
+		"nyoom-engineering/oxocarbon.nvim",
+		config = function ()
+			vim.cmd("colorscheme oxocarbon")
+		end
+		-- Add in any other configuration; 
+		--   event = foo, 
+		--   config = bar
+		--   end,
 	},
 }

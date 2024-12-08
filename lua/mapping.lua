@@ -5,13 +5,14 @@ local opts = { noremap = true, silent = true }
 -- Key mappinrequire('gitsigns')
 local map = vim.api.nvim_set_keymap
 local mapp = vim.keymap.set
+
 -- Insert Keybinds
 map("i", "jk", "<Esc>", opts)
 map("i", "kj", "<Esc>", opts)
 
 -- Normal Keybinds
 map("n", "<leader>pv", ":Ex<CR>", opts)
-map("n", ";", ":", opts)
+--map("n", ";", ":", opts)
 map("n", "<C-n>", ":noh<CR>", opts)
 map("n", "<C-d>", "<C-d>zz", opts) -- go down half a page and center
 map("n", "<C-u>", "<C-u>zz", opts) -- go up half a page and center
@@ -27,7 +28,9 @@ map("v", "J", ":m '>+1<CR>gv=gv", opts) -- move line down 1
 map("v", "K", ":m '<-2<CR>gv=gv", opts) -- move line up 1
 map("x", "<leader>p", [["_dP]], opts)   -- Replaces text without replacing the yank register (so you can yank and replace multiple things)
 
--- Telescope plugin keybinds
+----------------------------------------------------------
+-- Telescope keybinds
+----------------------------------------------------------
 map('n', '<leader>ff', '<cmd>Telescope find_files<cr>', { desc = "Find Files" })
 map("n", "<leader>fs", "<cmd>Telescope live_grep<cr>", { desc = "Live Grep" })
 map("n", "<leader>fb", "<cmd>Telescope buffers<cr>", { desc = "Find Buffers" })
@@ -44,7 +47,9 @@ end, { desc = "grep current WORD" })
 
 map('n', '<leader>vf', '<cmd>lua vim.lsp.buf.format()<CR>', { noremap = true, silent = true, desc = "SV format" })
 
--- Gitsigns plugin keybinds
+-----------------------------------------------------------
+--- Gitsigns keybinds
+-----------------------------------------------------------
 mapp('n', ']c', function()
   require('gitsigns').next_hunk()
 end, { desc = "Next Git Hunk" })
@@ -81,15 +86,29 @@ mapp('n', '<leader>hd', function()
   require('gitsigns').diffthis()
 end, { desc = 'Show diff' })
 
+-----------------------------------------------------------
+--- Snippet keybinds
+-----------------------------------------------------------
 local ls = require("luasnip")
-mapp({ "i" }, "<C-s>e", function() ls.expand() end, { silent = true, desc = "luasnip expand" })
-mapp({ "i", "s" }, "<C-s>;", function() ls.jump(1) end, { silent = true, desc = "luasnip jump +1" })
-mapp({ "i", "s" }, "<C-s>;", function() ls.jump(-1) end, { silent = true, desc = "luasnip jump -1" })
+mapp({ "i", "s" }, "<C-k>", function()             -- Snippet keybind that "expands" what your typing into a snippet 
+  if ls.expand_or_jumpable() then  -- (does nothing if none) and while in a snippet jumps to the next field
+    ls.expand_or_jump()
+  end
+end, {silent = true})
+mapp({ "i", "s" }, "<C-j>", function()     -- Snippet keybind that is the jumps the opposite way of ctrl+k 
+  if ls.jumpable(-1) then
+    ls.jump(-1)
+  end
+end, {silent = true})
 
-mapp({ "i", "s" }, "<C-E>", function()
+mapp({ "i", "s" }, "<C-l>", function()
   if ls.choice_active() then
     ls.change_choice(1)
   end
 end, { silent = true })
+mapp("n", "<leader><leader>s", "<cmd>source ~/.config/nvim/after/plugin/luasnip.lua<CR>", {desc = "source snippets"})
 
-
+-----------------------------------------------------------
+--- Themery keybinds
+-----------------------------------------------------------
+mapp("n", "<leader>th", ":Themery<CR>", {silent=true, desc = "source"})

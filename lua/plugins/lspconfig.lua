@@ -23,7 +23,7 @@ return {
 				"force",
 				{},
 				vim.lsp.protocol.make_client_capabilities(),
-				cmp_lsp.default_capabilities())
+				cmp_lsp.default_capabilities(vim.lsp.protocol.make_client_capabilities()))
 
 			local on_attach = function(client, bufnr)
 				-- Enable completion triggered by <c-x><c-o>
@@ -38,7 +38,7 @@ return {
 				vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
 				vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
 				vim.keymap.set('n', '<leader>gi', vim.lsp.buf.implementation, bufopts)
-				vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+				vim.keymap.set('n', '<C-S-k>', vim.lsp.buf.signature_help, bufopts)
 				vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, bufopts)
 				vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
 				vim.keymap.set('n', '<leader>wl', function()
@@ -60,7 +60,6 @@ return {
 					"lua_ls",
 					"rust_analyzer",
 					"svls",
-					"verible",
 					"clangd",
 					"jdtls",
 					"pyright",
@@ -114,24 +113,47 @@ return {
 					end,
 					["svls"] = function()
 						lspconfig.svls.setup {
-							on_attach = on_attach,
-							capabilities = capabilities,
+							cmd = { "svls" },                  -- Ensure `svls` is in your PATH
+							on_attach = on_attach,             -- Reuse your shared on_attach
+							capabilities = capabilities,       -- Reuse shared capabilities
+							root_dir = require("lspconfig.util").find_git_ancestor, -- Detect project root
 							settings = {
-								root_dir = function(fname)
-									return require("lspconfig.util").find_git_ancestor(fname)
-								end,
-								cmd = { "svls" },
-								filetypes = { "verilog", "systemverilog" },
+								svls = {
+									systemverilog = {
+										includeIndexing = true, -- Index `include` files
+										excludePaths = {}, -- Add any paths to exclude from indexing
+										format = {
+											enable = true, -- Enable formatting
+											tabSize = 4, -- Set the preferred tab size
+										},
+										defines = {}, -- Optional: Preprocessor macros
+										require("luasnip.loaders.from_lua").load({ paths = "~/.config/nvim/lua/snippets" }),
+										includePaths = {
+											"/mnt/c/Computing/UVM/1800.2-2020.3.1/src/**", -- Add include paths
+										},
+										lint = {
+											enabled = true, -- Enable linting
+										},
+									},
+								},
 							},
 						}
 					end,
-					["verible"] = function()
-						lspconfig.verible.setup {
-							on_attach = on_attach,
-							flags = { debounce_text_changes = 150, },
-							root_dir = util.find_git_ancestor,
+					--[[["verible"] = function()
+						require("lspconfig").verible.setup {
+							on_attach = on_attach,              -- Use your shared on_attach function
+							capabilities = capabilities,        -- Shared capabilities (e.g., for nvim-cmp)
+							cmd = { "/usr/bin/verible-verilog-ls", "--background", "--log=info", "--indentation_spaces 4"}, -- Path to the verible-ls binary
+							root_dir = require("lspconfig.util").find_git_ancestor, -- Standard root detection
+							settings = {
+								verible = {
+									diagnostics = {
+										lint = true, -- Enable linting support
+									},
+								},
+							},
 						}
-					end,
+					end,--]]
 					["pyright"] = function()
 						lspconfig.pyright.setup {}
 					end,
@@ -218,12 +240,14 @@ return {
 			})
 
 			local cmp_select = { behavior = cmp.SelectBehavior.Select }
+			local ls = require("luasnip")
 
 			cmp.setup({
 				snippet = {
 					expand = function(args)
-						require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+						ls.lsp_expand(args.body) -- For `luasnip` users.
 					end,
+
 				},
 				mapping = cmp.mapping.preset.insert({
 					['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
@@ -244,11 +268,12 @@ return {
 				--	priority
 				--	max_item_count
 				sources = cmp.config.sources({
-					{ name = "gh_issues" },
 					{ name = "nvim_lua" },
-					{ name = "buffer" },
-					{ name = "LuaSnip" },
 					{ name = "nvim_lsp" },
+					{ name = "luasnip" },
+					{ name = "gh_issues" },
+				}, {
+					{ name = "buffer" },
 					{ name = "path" },
 				})
 			})
@@ -295,7 +320,7 @@ return {
 				vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
 				vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
 				vim.keymap.set('n', '<leader>gi', vim.lsp.buf.implementation, bufopts)
-				vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+				vim.keymap.set('n', '<C-S-k>', vim.lsp.buf.signature_help, bufopts)
 				vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, bufopts)
 				vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, bufopts)
 				vim.keymap.set('n', '<leader>wl', function()
