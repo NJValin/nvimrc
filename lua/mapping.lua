@@ -18,7 +18,7 @@ map("n", "<C-d>", "<C-d>zz", opts) -- go down half a page and center
 map("n", "<C-u>", "<C-u>zz", opts) -- go up half a page and center
 map("n", "n", "nzzzv", opts)
 map("n", "N", "Nzzzv", opts)
-map("n", "<leader>Y", [["+Y]], opts)           -- yank the current line to the system keyboard
+map("n", "<leader>Y", [["+Y]], opts)           -- yank the current line to the system keyboard "+ register
 mapp({ "n", "v" }, "<leader>y", [["+y]], opts) -- Yank to the system clipboard
 mapp({ "n", "v" }, "<leader>d", [["_d]], opts) -- delete text without affecting the yank (unnamed) register
 map("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], opts)
@@ -28,6 +28,12 @@ map("v", "J", ":m '>+1<CR>gv=gv", opts) -- move line down 1
 map("v", "K", ":m '<-2<CR>gv=gv", opts) -- move line up 1
 map("x", "<leader>p", [["_dP]], opts)   -- Replaces text without replacing the yank register (so you can yank and replace multiple things)
 
+-- Terminal Keybinds (create a terminal with :terminal (do :sp | terminal))
+map("t", "<Esc>", "<c-\\><c-n>", opts) -- Exit terminal mode, stops your keys from being piped to the terminal
+map("t", "<A-h>", "<c-\\><c-n><c-w>h", opts) -- While in terminal mode Alt+h will exit terminal mode and go to left window
+map("t", "<A-j>", "<c-\\><c-n><c-w>j", opts) -- While in terminal mode Alt+j will exit terminal mode and go to right window
+map("t", "<A-k>", "<c-\\><c-n><c-w>k", opts) -- While in terminal mode Alt+k will exit terminal mode and go to the window above
+map("t", "<A-l>", "<c-\\><c-n><c-w>l", opts) -- While in terminal mode Alt+l will exit terminal mode and go to the window below
 ----------------------------------------------------------
 -- Telescope keybinds
 ----------------------------------------------------------
